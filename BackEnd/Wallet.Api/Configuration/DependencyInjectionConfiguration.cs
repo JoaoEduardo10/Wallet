@@ -12,6 +12,7 @@ namespace Wallet.Api.Configuration
             DependencyInjectionContainer.RegisterInfrastructureServices(services);
 
             services.AddScoped<UserBusiness>();
+            services.AddScoped<WalletBusiness>();
         }
     }
 }

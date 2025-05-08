@@ -24,7 +24,7 @@ namespace Wallet.Application.Business
             _authentication = authentication;
         }
 
-        public async Task<Result<Authentication>> LoginUser (LoginUserDto login)
+        public async Task<Result<Authentication>> LoginUserAsync(LoginUserDto login)
         {
             var user = await _userRepository.GetUserByEmailAsync(login.Email);
 

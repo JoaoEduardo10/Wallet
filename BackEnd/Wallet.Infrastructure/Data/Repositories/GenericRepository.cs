@@ -31,9 +31,9 @@ namespace Wallet.Infrastructure.Data.Repositories
             return DbSet;
         }
 
-        public async Task<TEntity?> GetByIdAsync(Guid id)
+        public TEntity GetById(Guid id)
         {
-            return await DbSet.FindAsync(id);
+            return DbSet.Find(id);
         }
 
         public void Remove(Guid id)
@@ -46,7 +46,7 @@ namespace Wallet.Infrastructure.Data.Repositories
             return Db.SaveChangesAsync();
         }
 
-        public void Update(TEntity obj)
+        public virtual void Update(TEntity obj)
         {
             DbSet.Entry(obj).State = EntityState.Modified;
         }

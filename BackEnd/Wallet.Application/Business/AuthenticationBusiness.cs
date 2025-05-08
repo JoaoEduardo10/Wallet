@@ -27,7 +27,7 @@ namespace Wallet.Application.Business
         {
             var tokenExpirationTime = DateTime.Now.AddSeconds(TokenLifespan);
 
-            var user = await  _userRepository.GetByIdAsync(userId);
+            var user =  _userRepository.GetById(userId);
 
             if (user is null)
             {

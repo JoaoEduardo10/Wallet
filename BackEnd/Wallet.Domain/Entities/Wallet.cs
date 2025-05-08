@@ -35,6 +35,53 @@ namespace Wallet.Domain.Entities
             return result;
         }
 
+        public Result AddAmount(decimal amount)
+        {
+            var result = new Result();
+
+            if (amount < 0)
+            {
+                result.AddError("O valor não pode ser negativo.");
+            }
+
+            if (Balance + amount < Balance)
+            {
+                result.AddError("Não foi possível adicionar o valor.");
+            }
+
+            Balance += amount;
+            UpdatedAt = DateTime.UtcNow;
+
+            return result;
+        }
+
+        public Result RemoveAmount(decimal amount)
+        {
+            var result = new Result();
+
+            if (amount < 0)
+            {
+                result.AddError("O valor não pode ser negativo.");
+            }
+
+            if (amount > Balance)
+            {
+                result.AddError("Saldo insuficiente para realizar a operação.");
+            }
+
+            if (Balance - amount < 0)
+            {
+                result.AddError("Não foi possivel executar a operação.");
+            }
+
+            Balance -= amount;
+            UpdatedAt = DateTime.UtcNow;
+
+            return result;
+        }
+
+        
+
         public void CreateWallet()
         {
             const decimal INITIAL_BALANCE = 100.00m;

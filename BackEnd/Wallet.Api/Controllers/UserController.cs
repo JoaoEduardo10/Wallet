@@ -37,7 +37,7 @@ namespace Wallet.Api.Controllers
         {
             try
             {
-                var result = await _userBusiness.LoginUser(user);
+                var result = await _userBusiness.LoginUserAsync(user);
 
                 if (!result.Success)
                 {

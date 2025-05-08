@@ -8,11 +8,24 @@ namespace Wallet.Infrastructure.Data.Repositories
     {
         public WalletRepository(WalletDbContext db) : base(db) { }
 
-        public IQueryable<Domain.Entities.Wallet> GetAllWithCollections()
+        public Task<Domain.Entities.Wallet?> GetWalletByEmailAsync(string email)
         {
-            return GetAll()
+            return Db.Wallets
                 .Include(w => w.User)
-                .Include(w => w.Transactions);
+                .Where(w => w.User.Email == email)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<Domain.Entities.Wallet?> GetWalletByIdAsync(Guid id)
+        {        
+            return await Db.Wallets
+                .Include(w => w.User)
+                .SingleOrDefaultAsync(w => w.Id == id);
+        }
+
+        public Task<Domain.Entities.Wallet?> GetWalletByUserIdAsync(Guid userId)
+        {
+            return Db.Wallets.SingleOrDefaultAsync(w => w.UserId == userId);
         }
     }
 }

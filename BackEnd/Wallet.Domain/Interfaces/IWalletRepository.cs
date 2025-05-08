@@ -1,8 +1,10 @@
 ﻿
 namespace Wallet.Domain.Interfaces
 {
-    public interface IWalletRepository : IGenericRepository<Wallet.Domain.Entities.Wallet> 
+    public interface IWalletRepository : IGenericRepository<Entities.Wallet> 
     {
-        IQueryable<Wallet.Domain.Entities.Wallet> GetAllWithCollections();
+        Task<Entities.Wallet?> GetWalletByEmailAsync(string email);
+        Task<Entities.Wallet?> GetWalletByUserIdAsync(Guid userId);
+        Task<Entities.Wallet?> GetWalletByIdAsync(Guid id);
     }
 }

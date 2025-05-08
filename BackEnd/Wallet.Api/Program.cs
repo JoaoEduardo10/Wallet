@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Wallet.Api.Configuration;
+using Wallet.Api.Configuration.Token;
 using Wallet.Infrastructure.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,11 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddDataBase(builder.Configuration);
+builder.Services.AddDataBaseConfiguration(builder.Configuration);
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerConfiguration();
 
-builder.Services.AddDependencyInjection();
+builder.Services.AddDependencyInjectionConfiguration();
+builder.Services.AddIdentityConfiguration(builder.Configuration);
 
 var app = builder.Build();
 
@@ -28,12 +30,18 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SeuProjeto API V1");
+        c.RoutePrefix = string.Empty;
+    });
+
     app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
 
+app.UseAuthorization();
 app.UseAuthorization();
 
 app.MapControllers();

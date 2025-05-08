@@ -31,9 +31,9 @@ namespace Wallet.Infrastructure.Data.Repositories
             return DbSet;
         }
 
-        public TEntity GetById(Guid id)
+        public async Task<TEntity?> GetByIdAsync(Guid id)
         {
-            return DbSet.Find(id);
+            return await DbSet.FindAsync(id);
         }
 
         public void Remove(Guid id)

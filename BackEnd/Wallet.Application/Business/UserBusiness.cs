@@ -53,7 +53,7 @@ namespace Wallet.Application.Business
 
                 await _dbTransactionRepository.CommitTransactionAsync();
 
-                return Result<CreateUserDto>.FromValue(UserMapping.ToDto(newUser));
+                return Result<CreateUserDto>.ToValue(UserMapping.ToDto(newUser));
             }
             catch
             {

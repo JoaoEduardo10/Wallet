@@ -3,9 +3,9 @@ using Wallet.Infrastructure.IoC;
 
 namespace Wallet.Api.Configuration
 {
-    public static class DependencyInjection
+    public static class DependencyInjectionConfiguration
     {
-        public static void AddDependencyInjection(this IServiceCollection services)
+        public static void AddDependencyInjectionConfiguration(this IServiceCollection services)
         {
             if (services is null) throw new ArgumentException(nameof(services));
 

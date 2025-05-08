@@ -3,9 +3,9 @@ using Wallet.Infrastructure.Data.Context;
 
 namespace Wallet.Api.Configuration
 {
-    public static class Database
+    public static class DatabaseConfiguration
     {
-        public static void AddDataBase(this IServiceCollection services, IConfiguration configuration)
+        public static void AddDataBaseConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             if (services is null) throw new ArgumentNullException(nameof(services));
 

@@ -6,27 +6,27 @@
         public Result(params string[] errors) : base(errors) { }
         public Result(IEnumerable<string> errors) : base(errors) {}
 
-        public static Result<TValue> FromValue<TValue>(TValue value)
+        public static Result<TValue> ToValue<TValue>(TValue value)
         {
             return new Result<TValue>(value);
         }
 
-        public static Result<TValue> FromError<TValue>(params string[] errors)
+        public static Result<TValue> ToError<TValue>(params string[] errors)
         {
             return new Result<TValue>(errors);
         }
 
-        public static Result<TValue> FromError<TValue>(IEnumerable<string> errors)
+        public static Result<TValue> ToError<TValue>(IEnumerable<string> errors)
         {
             return new Result<TValue>(errors);
         }
 
-        public static Result FromError(params string[] errors)
+        public static Result ToError(params string[] errors)
         {
             return new Result(errors);
         }
 
-        public static Result FromSuccess()
+        public static Result ToSuccess()
         {
             return new Result();
         }
@@ -46,17 +46,17 @@
             Value = value;
         }
 
-        public static Result<TValue> FromValue(TValue value)
+        public static Result<TValue> ToValue(TValue value)
         {
             return new Result<TValue>(value);
         }
 
-        public static new Result<TValue> FromErrors(params string[] errors)
+        public static new Result<TValue> ToErrors(params string[] errors)
         {
             return new Result<TValue>(errors);
         }
 
-        public static new Result<TValue> FromErrors(IEnumerable<string> errors)
+        public static new Result<TValue> ToErrors(IEnumerable<string> errors)
         {
             return new Result<TValue>(errors);
         }

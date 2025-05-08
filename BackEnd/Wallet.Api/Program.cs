@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Wallet.Api;
 using Wallet.Api.Configuration;
 using Wallet.Api.Configuration.Token;
 using Wallet.Infrastructure.Data.Context;
@@ -24,6 +25,10 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<WalletDbContext>();
 
     dbContext.Database.Migrate();
+
+    var seedData = new SeedData(dbContext);
+
+    seedData.Add();
 }
 
 // Configure the HTTP request pipeline.

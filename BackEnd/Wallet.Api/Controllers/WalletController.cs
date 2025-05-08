@@ -14,7 +14,7 @@ namespace Wallet.Api.Controllers
 
         [HttpGet]
         [Route("{userId}")]
-        public async Task<IActionResult> GetWalletByUserId(Guid userId)
+        public async Task<IActionResult> GetWalletByUserIdAsync(Guid userId)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Wallet.Api.Controllers
 
         [HttpPost]
         [Route("transfer")]
-        public async Task<IActionResult> GetWalletByUserId([FromBody] TransferAmountDto transfer)
+        public async Task<IActionResult> TransferAmountAsync([FromBody] TransferAmountDto transfer)
         {
             try
             {
@@ -57,18 +57,18 @@ namespace Wallet.Api.Controllers
 
         [HttpPut]
         [Route("add-balance/{id}")]
-        public async Task<IActionResult> AddBalaceAsync( Guid id, [FromBody] decimal amount)
+        public async Task<IActionResult> AddBalanceAsync( Guid id, [FromBody] decimal amount)
         {
             try
             {
-                var result = await _walletBusiness.AddBalaceAsync(id, amount);
+                var result = await _walletBusiness.AddBalanceAsync(id, amount);
 
                 if (!result.Success)
                 {
                     return BadRequest(HandlingErrors.FormateErrors(result));
                 }
 
-                return Created();
+                return NoContent();
             }
             catch (Exception ex)
             {

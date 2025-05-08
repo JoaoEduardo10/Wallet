@@ -95,7 +95,7 @@ namespace Wallet.Application.Business
         }
 
 
-        public async Task<Result<Domain.Entities.Wallet>> AddBalaceAsync(Guid id, decimal amount)
+        public async Task<Result<Domain.Entities.Wallet>> AddBalanceAsync(Guid id, decimal amount)
         {
             try
             {

@@ -13,6 +13,7 @@ namespace Wallet.Api.Configuration
 
             services.AddScoped<UserBusiness>();
             services.AddScoped<WalletBusiness>();
+            services.AddScoped<TransactionBusiness>();
         }
     }
 }

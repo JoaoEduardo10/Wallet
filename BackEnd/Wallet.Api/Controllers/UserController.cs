@@ -12,7 +12,7 @@ namespace Wallet.Api.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto user)
+        public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserDto user)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Wallet.Api.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> LoginUser([FromBody] LoginUserDto user)
+        public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserDto user)
         {
             try
             {

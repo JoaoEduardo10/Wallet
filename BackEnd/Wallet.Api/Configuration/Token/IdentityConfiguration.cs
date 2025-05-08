@@ -32,7 +32,7 @@ namespace Wallet.Api.Configuration.Token
                     };
                 });
 
-            services.AddSingleton<IAuthentication>(serviceProvider =>
+            services.AddScoped<IAuthentication>(serviceProvider =>
             {
                 var userRepository = serviceProvider.GetRequiredService<IUserRepository>();
 

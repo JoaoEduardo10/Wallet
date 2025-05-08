@@ -17,7 +17,7 @@ namespace Wallet.Application.Mapping
             };
         }
 
-        public static CreateUserDto ToDto(User user)
+        public static CreateUserDto ToCreateUserDto(User user)
         {
             return new CreateUserDto
             {

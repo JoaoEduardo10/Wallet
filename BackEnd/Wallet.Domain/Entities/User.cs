@@ -70,23 +70,30 @@ namespace Wallet.Domain.Entities
             Password = Convert.ToBase64String(hashBytes);
         }
 
-        public bool VerifyPassword(string storedHash)
+        public bool VerifyPassword(string password)
         {
-            byte[] hashBytes = Convert.FromBase64String(storedHash);
-
-            byte[] salt = new byte[16];
-            Array.Copy(hashBytes, 0, salt, 0, 16);
-
-            var pbkdf2 = new Rfc2898DeriveBytes(Password, salt, 100000, HashAlgorithmName.SHA256);
-            byte[] hash = pbkdf2.GetBytes(32);
-
-            for (int i = 0; i < 32; i++)
+            try
             {
-                if (hashBytes[i + 16] != hash[i])
-                    return false;
-            }
+                byte[] hashBytes = Convert.FromBase64String(Password);
 
-            return true;
+                byte[] salt = new byte[16];
+                Array.Copy(hashBytes, 0, salt, 0, 16);
+
+                var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000, HashAlgorithmName.SHA256);
+                byte[] hash = pbkdf2.GetBytes(32);
+
+                for (int i = 0; i < 32; i++)
+                {
+                    if (hashBytes[i + 16] != hash[i])
+                        return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private bool IsEmailValid()

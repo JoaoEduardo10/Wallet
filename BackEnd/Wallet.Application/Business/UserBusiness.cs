@@ -1,5 +1,7 @@
 ﻿using Wallet.Application.Dtos.User;
+using Wallet.Application.Interfaces;
 using Wallet.Application.Mapping;
+using Wallet.Application.Models;
 using Wallet.Domain.Interfaces;
 using Wallet.Domain.Utilities;
 using Wallet.Infrastructure.Data.Repositories;
@@ -10,13 +12,42 @@ namespace Wallet.Application.Business
     {
         private readonly IUserRepository _userRepository;
         private readonly IWalletRepository _walletRepository;
+        private readonly IAuthentication _authentication;
+
         private readonly DbTransactionRepository _dbTransactionRepository;
 
-        public UserBusiness(IUserRepository userRepository, DbTransactionRepository dbTransactionRepository, IWalletRepository walletRepository)
+        public UserBusiness(IUserRepository userRepository, DbTransactionRepository dbTransactionRepository, IWalletRepository walletRepository, IAuthentication authentication)
         {
             _userRepository = userRepository;
             _dbTransactionRepository = dbTransactionRepository;
             _walletRepository = walletRepository;
+            _authentication = authentication;
+        }
+
+        public async Task<Result<Authentication>> LoginUser (LoginUserDto login)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(login.Email);
+
+            if (user is null)
+            {
+                return new Result<Authentication>("E-mail ou senha estão incorretos.");
+            }
+
+            var isPasswordCorrect = user.VerifyPassword(login.Password);
+
+            if (!isPasswordCorrect)
+            {
+                return new Result<Authentication>("E-mail ou senha estão incorretos.");
+            }
+
+            var resultAuthentication = await _authentication.GetAuthenticationAsync(user.Id);
+
+            if (!resultAuthentication.Success)
+            {
+                return new Result<Authentication>(resultAuthentication.Errors);
+            }
+
+            return Result.ToValue(resultAuthentication.Value);
         }
 
         public async Task<Result<CreateUserDto>> CreateUserAsync(CreateUserDto user)
@@ -53,7 +84,7 @@ namespace Wallet.Application.Business
 
                 await _dbTransactionRepository.CommitTransactionAsync();
 
-                return Result<CreateUserDto>.ToValue(UserMapping.ToDto(newUser));
+                return Result<CreateUserDto>.ToValue(UserMapping.ToCreateUserDto(newUser));
             }
             catch
             {

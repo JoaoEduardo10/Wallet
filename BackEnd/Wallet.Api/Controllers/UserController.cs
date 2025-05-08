@@ -30,5 +30,26 @@ namespace Wallet.Api.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> LoginUser([FromBody] LoginUserDto user)
+        {
+            try
+            {
+                var result = await _userBusiness.LoginUser(user);
+
+                if (!result.Success)
+                {
+                    return BadRequest(HandlingErrors.FormateErrors(result));
+                }
+
+                return Ok(result.Value);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

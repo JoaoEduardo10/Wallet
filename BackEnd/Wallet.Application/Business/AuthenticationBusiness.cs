@@ -34,6 +34,8 @@ namespace Wallet.Application.Business
                 return new Result<Authentication>("Não foi possivel autenticar");
             }
 
+            var notBeforeTime = DateTime.Now;
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -42,6 +44,7 @@ namespace Wallet.Application.Business
                     new Claim(ClaimTypes.Name, user.Name),
                 }),
                 Expires = tokenExpirationTime,
+                NotBefore = notBeforeTime,
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenSecret)),
                     SecurityAlgorithms.HmacSha256Signature)

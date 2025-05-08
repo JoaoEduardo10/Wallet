@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Wallet.Api.Configuration;
+using Wallet.Infrastructure.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +11,24 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddDataBase(builder.Configuration);
 
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddDependencyInjection();
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<WalletDbContext>();
+
+    dbContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI();
     app.MapOpenApi();
 }
 

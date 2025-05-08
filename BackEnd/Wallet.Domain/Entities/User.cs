@@ -11,9 +11,14 @@ namespace Wallet.Domain.Entities
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;  
-        public Wallet Wallet { get; set; } = new Wallet();
+        public Wallet Wallet { get; set; } 
         public Guid WalletId { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        public User()
+        {
+            Wallet = new Wallet();
+        }
 
         public Result ValidateUser()
         {

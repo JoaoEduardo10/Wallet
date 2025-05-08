@@ -6,10 +6,10 @@ namespace Wallet.Domain.Entities
     public class Transaction
     {
         public Guid Id { get; set; }
-        public Guid SenderWallerId { get; set; }
+        public Guid SenderWalletId { get; set; }
         public Wallet SenderWallet { get; set; }
-        public Guid ReceiverWallerId { get; set; }
-        public Wallet ReceiverWaller { get; set; }
+        public Guid ReceiverWalletId { get; set; }
+        public Wallet ReceiverWallet { get; set; }
         public decimal Amout { get; set; }
         public TransactionStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -17,20 +17,20 @@ namespace Wallet.Domain.Entities
         public Transaction()
         {
             SenderWallet = new Wallet();
-            ReceiverWaller = new Wallet();
+            ReceiverWallet = new Wallet();
         }
 
         public Result ValidateTransaction()
         {
             var result = new Result();
 
-            if (SenderWallerId == Guid.Empty)
+            if (SenderWalletId == Guid.Empty)
                 result.AddError("Carteira remetente inválida.");
 
-            if (ReceiverWallerId == Guid.Empty)
+            if (ReceiverWalletId == Guid.Empty)
                 result.AddError("Carteira destinatária inválida.");
 
-            if (SenderWallerId == ReceiverWallerId)
+            if (SenderWalletId == ReceiverWalletId)
                 result.AddError("A carteira remetente não pode ser igual à destinatária.");
 
             if (Amout <= 0)

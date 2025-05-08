@@ -7,13 +7,15 @@ namespace Wallet.Infrastructure.IoC
 {
     public static class DependencyInjectionContainer
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterInfrastructureServices(IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IWalletRepository, WalletRepository>();
+            services.AddScoped<DbTransactionRepository>();
 
             services.AddScoped<WalletDbContext>();
+            
         }
     }
 }

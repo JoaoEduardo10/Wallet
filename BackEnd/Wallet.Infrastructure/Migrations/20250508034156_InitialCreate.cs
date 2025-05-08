@@ -19,7 +19,6 @@ namespace Wallet.Infrastructure.Migrations
                     name = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
-                    wallet_id = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -97,6 +96,12 @@ namespace Wallet.Infrastructure.Migrations
                 name: "IX_transactions_WalletId",
                 table: "transactions",
                 column: "WalletId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_email",
+                table: "users",
+                column: "email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_wallets_user_id",

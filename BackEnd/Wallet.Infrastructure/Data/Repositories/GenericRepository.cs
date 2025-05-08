@@ -17,7 +17,7 @@ namespace Wallet.Infrastructure.Data.Repositories
 
         public void Add(TEntity obj)
         {
-            DbSet.Add(obj);
+            DbSet.Entry(obj).State = EntityState.Added;
         }
 
         public void Dispose()
@@ -38,17 +38,17 @@ namespace Wallet.Infrastructure.Data.Repositories
 
         public void Remove(Guid id)
         {
-            DbSet.Remove(DbSet.Find(id));
+            DbSet.Entry(DbSet.Find(id)).State = EntityState.Deleted;
         }
 
-        public int SaveChanges()
+        public virtual Task<int> SaveChangesAsync()
         {
-            return Db.SaveChanges();
+            return Db.SaveChangesAsync();
         }
 
         public void Update(TEntity obj)
         {
-            DbSet.Update(obj);
+            DbSet.Entry(obj).State = EntityState.Modified;
         }
     }
 }

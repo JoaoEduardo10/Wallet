@@ -12,6 +12,9 @@ namespace Wallet.Infrastructure.Data.Mapping
 
             builder.HasKey(x => x.Id);
 
+            builder.HasIndex(x => x.Email)
+                .IsUnique();
+
             builder.Property(x => x.Id)
                 .HasColumnName("id")
                 .IsRequired();
@@ -32,17 +35,10 @@ namespace Wallet.Infrastructure.Data.Mapping
                 .HasColumnName("created_at")
                 .IsRequired();
 
-            builder.Property(x => x.WalletId)
-                .HasColumnName("wallet_id")
-                .IsRequired();
-
-            builder.Property(x => x.WalletId)
-                .IsRequired();
-
             builder.HasOne(x => x.Wallet)
-                .WithOne()
-                .HasForeignKey<User>(x => x.WalletId)
-                .OnDelete(DeleteBehavior.Cascade);
+            .WithOne(w => w.User)
+            .HasForeignKey<Wallet.Domain.Entities.Wallet>(w => w.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

@@ -14,5 +14,10 @@ namespace Wallet.Infrastructure.Data.Repositories
             return GetAll()
                 .Include(u => u.Wallet);
         }
+
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await Db.Users.SingleOrDefaultAsync(u => u.Email == email);
+        }
     }
 }

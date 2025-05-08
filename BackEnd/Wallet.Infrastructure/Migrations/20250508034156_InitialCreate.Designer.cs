@@ -12,7 +12,7 @@ using Wallet.Infrastructure.Data.Context;
 namespace Wallet.Infrastructure.Migrations
 {
     [DbContext(typeof(WalletDbContext))]
-    [Migration("20250508013346_InitialCreate")]
+    [Migration("20250508034156_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -92,11 +92,10 @@ namespace Wallet.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("password");
 
-                    b.Property<Guid>("WalletId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("wallet_id");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("users", (string)null);
                 });

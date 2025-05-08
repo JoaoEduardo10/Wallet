@@ -89,11 +89,10 @@ namespace Wallet.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("password");
 
-                    b.Property<Guid>("WalletId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("wallet_id");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("users", (string)null);
                 });

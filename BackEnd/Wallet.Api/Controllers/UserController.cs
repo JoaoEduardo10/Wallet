@@ -20,7 +20,7 @@ namespace Wallet.Api.Controllers
 
                 if (!result.Success)
                 {
-                    return NotFound(HandlingErrors.FormateErrors(result));
+                    return BadRequest(HandlingErrors.FormateErrors(result));
                 }
 
                 return Created();

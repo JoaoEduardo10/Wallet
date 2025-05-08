@@ -3,7 +3,7 @@
     public class ResultBase
     {
         public IEnumerable<string> Errors { get; set; }
-        public bool Success => Errors.Any();
+        public bool Success => !Errors.Any();
 
         protected ResultBase(params string[] errors) 
         { 

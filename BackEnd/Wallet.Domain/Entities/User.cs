@@ -1,6 +1,5 @@
 ﻿using System.Net.Mail;
 using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 using Wallet.Domain.Utilities;
 
 namespace Wallet.Domain.Entities
@@ -12,7 +11,6 @@ namespace Wallet.Domain.Entities
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;  
         public Wallet Wallet { get; set; } 
-        public Guid WalletId { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public User()

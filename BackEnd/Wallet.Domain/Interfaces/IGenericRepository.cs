@@ -7,6 +7,6 @@
         IQueryable<TEntity> GetAll();
         void Update(TEntity obj);
         void Remove(Guid id);
-        int SaveChanges();
+        Task<int> SaveChangesAsync();
     }
 }

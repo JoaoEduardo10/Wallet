@@ -15,8 +15,7 @@ namespace Wallet.Domain.Entities
 
         public Wallet()
         {
-            Transactions = new List<Transaction>();
-            User = new User();
+            Transactions = new HashSet<Transaction>();
         }
 
         public Result ValidateWallet()

@@ -8,7 +8,7 @@ export default async function CarteiraLayout({
 }>) {
   const session = await getServerAuthSession();
 
-  if (session == null) {
+  if (session?.user == null) {
     redirect("/");
   }
 

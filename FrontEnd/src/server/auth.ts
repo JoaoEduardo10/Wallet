@@ -7,65 +7,61 @@ import { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import IGenericSession from "@/app/models/Dtos/session";
 
-const credentialsProvider = CredentialsProvider({
-  name: "wallet",
-  credentials: {
-    email: { label: "Email", type: "email", placeholder: "email" },
-    password: { label: "Password", type: "password" },
-  },
-
-  async authorize(Credentials) {
-    try {
-      const { email, password } = Credentials!;
-
-      const response = await UserService.login(email, password);
-
-      return response.data;
-    } catch (error: unknown) {
-      const message = treatErrorAxios(error);
-
-      console.log(message);
-
-      return null;
-    }
-  },
-});
-
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
     maxAge: 3600,
   },
-  providers: [credentialsProvider],
+  pages: {
+    signIn: "/",
+    signOut: "/carteira",
+  },
+  providers: [
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email", placeholder: "email" },
+        password: { label: "Password", type: "password" },
+      },
+
+      async authorize(credentials) {
+        try {
+          const { email, password } = credentials!;
+
+          const response = await UserService.login(email, password);
+
+          return response.data;
+        } catch (error: unknown) {
+          const message = treatErrorAxios(error);
+
+          throw new Error(message);
+        }
+      },
+    }),
+  ],
   callbacks: {
     jwt: async ({ token, user }) => {
-      const auth = user as unknown as Authentication;
+      if (user) {
+        const auth = user as Authentication;
+        const isSignIN = auth.isAuthenticated;
 
-      const isSignIN = auth.isAuthenticated;
-      const actualDateInSeconds = Math.floor(Date.now() / 1000);
-
-      if (isSignIN) {
-        if (!user) {
-          return Promise.resolve({});
+        if (isSignIN) {
+          token.name = auth.username;
+          token.jwt = auth.token;
+          token.expiration = auth.tokenExpirationTime;
+          token.isAuthenticated = isSignIN;
         }
-
-        token.name = auth.username;
-        token.jwt = auth.token;
-        token.expiration = auth.tokenExpirationTime;
       }
 
       const time = token.expiration as unknown as number;
+      const actualDateInSeconds = Math.floor(Date.now() / 1000);
 
-      if (!time) {
-        return Promise.resolve({});
+      if (!time || actualDateInSeconds > time) {
+        return {}; // Retorna um objeto vazio caso o token tenha expirado
       }
 
-      if (actualDateInSeconds > time) {
-        return Promise.resolve({});
-      }
-
-      return Promise.resolve(token);
+      return token;
     },
 
     async session({
@@ -75,15 +71,23 @@ export const authOptions: NextAuthOptions = {
       session: Session;
       token: JWT;
     }): Promise<Session | DefaultSession> {
-      if (!token || !token.jwt || !session) {
+      if (!token || !token.jwt || !session || !token.isAuthenticated) {
+        console.log("aque");
         return { ...session, user: {} };
       }
 
-      const newSession = { ...session, acessToken: "" };
+      const newSession = {
+        ...session,
+        acessToken: "",
+        user: {
+          isAuthenticated: false,
+          ...session.user,
+        },
+      };
 
-      newSession.acessToken = token.jwt as string;
       newSession.user = {
         name: token.name,
+        isAuthenticated: true, // ✅ Adiciona a propriedade esperada
       };
 
       return { ...newSession };

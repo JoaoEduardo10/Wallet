@@ -16,7 +16,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Wallet",
   description: "Carteira de Pagamentos",
-  
 };
 
 export default function RootLayout({

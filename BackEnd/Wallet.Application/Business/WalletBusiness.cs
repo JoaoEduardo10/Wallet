@@ -71,7 +71,7 @@ namespace Wallet.Application.Business
                     ReceiverWalletId = receiverWallet.Id,
                     Amout = transfer.Amount,
                     Status = TransactionStatus.Completed,
-                    CreatedAt = new DateTime(2023, 1, 24, 0, 0, 0, DateTimeKind.Utc)
+                    CreatedAt = DateTime.UtcNow
                 };
 
 

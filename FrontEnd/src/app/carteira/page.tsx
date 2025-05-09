@@ -197,6 +197,7 @@ export default function Home() {
       setWallet((w) => ({ ...w, balance: wallet.balance + newValue }));
 
       setAddNewValue(0);
+      alert("valor adicinando com sucesso!");
     } catch (err: unknown) {
       const message = treatErrorAxios(err);
 
@@ -230,6 +231,8 @@ export default function Home() {
         amount: 0,
         receiverEmail: "",
       });
+
+      alert("transferencia concluida com sucesso");
     } catch (err: unknown) {
       const message = treatErrorAxios(err);
 

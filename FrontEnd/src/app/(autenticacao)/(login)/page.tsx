@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/loading";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,9 +13,12 @@ export default function Login() {
     password: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleLoginUser = async (formEvent: FormEvent<HTMLFormElement>) => {
     formEvent.preventDefault();
 
+    setIsLoading(true);
     const response = await signIn("credentials", {
       email: login.email,
       password: login.password,
@@ -23,8 +27,12 @@ export default function Login() {
 
     if (!response?.ok) {
       alert(response?.error);
+
+      setIsLoading(false);
       return;
     }
+
+    setIsLoading(false);
 
     const redirect = "/carteira";
 
@@ -33,6 +41,7 @@ export default function Login() {
 
   return (
     <main className="flex items-center justify-center h-full bg-gradient-to-r ">
+      {isLoading && <Loading />}
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm border-4 border-gray-300">
         <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
 

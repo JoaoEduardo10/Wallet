@@ -11,6 +11,10 @@ class UserService {
       password,
     });
   }
+
+  createUser(user: { name: string; email: string; password: string }) {
+    return api.post(this.url, user);
+  }
 }
 
 const userService = new UserService();

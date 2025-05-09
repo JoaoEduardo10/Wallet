@@ -86,6 +86,8 @@ export default function Home() {
               ),
             ]);
 
+          console.log();
+
           setRecipientTransactions(transactionsRecipentResponse.data.itens);
           setSentTransactions(transactionsSentResponse.data.itens);
 
@@ -242,6 +244,16 @@ export default function Home() {
     }
   };
 
+  const handleFormateData = (data: string) => {
+    const dataIso = new Date(data).toISOString().split("T")[0];
+
+    const [ano, mes, dia] = dataIso.split("-");
+
+    const dataFormatada = `${dia}-${mes}-${ano}`;
+
+    return dataFormatada;
+  };
+
   return (
     <main className="p-8 max-w-3xl mx-auto">
       {isLoading && <Loading />}
@@ -313,6 +325,48 @@ export default function Home() {
         <div className="overflow-x-auto">
           <h3 className="text-xl font-semibold mb-2">Recebidos </h3>
 
+          <section className="mb-8">
+            <div className="flex gap-4 items-center">
+              <div>
+                <label htmlFor="">Data Inicial</label>
+                <input
+                  type="date"
+                  onChange={(e) =>
+                    setFilterRecipient((prev) => ({
+                      ...prev,
+                      startDate: e.target.value,
+                    }))
+                  }
+                  value={filterRecipient.startDate}
+                  className="w-full px-4 py-2 border rounded-md"
+                  placeholder="Data Inicial"
+                />
+              </div>
+              <div>
+                <label htmlFor="">Data Final</label>
+                <input
+                  type="date"
+                  onChange={(e) =>
+                    setFilterRecipient((prev) => ({
+                      ...prev,
+                      endDate: e.target.value,
+                    }))
+                  }
+                  value={filterRecipient.endDate?.toString()}
+                  className="w-full px-4 py-2 border rounded-md"
+                  placeholder="Data Final"
+                />
+              </div>
+              <button
+                onClick={() => handlePageChangeRecipient(filterRecipient.page)}
+                disabled={isLoading}
+                className="bg-gray-200 cursor-pointer mt-6 disabled:cursor-no-drop text-gray-700 px-4 py-2 rounded-md disabled:opacity-50"
+              >
+                Filtro
+              </button>
+            </div>
+          </section>
+
           <table className="min-w-full bg-white border border-gray-200 rounded-md">
             <thead>
               <tr className="bg-gray-100 text-gray-700">
@@ -332,7 +386,7 @@ export default function Home() {
                       R$ {transaction.amount.toFixed(2)}
                     </td>
                     <td className="px-4 py-2 border-b">
-                      {new Date(transaction.data).toLocaleDateString()}
+                      {handleFormateData(transaction.data)}
                     </td>
                   </tr>
                 ))
@@ -352,7 +406,7 @@ export default function Home() {
             onClick={() =>
               handlePageChangeRecipient(paginationRecipient.page - 1)
             }
-            disabled={paginationRecipient.page === 1}
+            disabled={paginationRecipient.page <= 1}
             className="bg-gray-200 cursor-pointer disabled:cursor-no-drop text-gray-700 px-4 py-2 rounded-md disabled:opacity-50"
           >
             Anterior
@@ -366,7 +420,8 @@ export default function Home() {
               handlePageChangeRecipient(paginationRecipient.page + 1)
             }
             disabled={
-              paginationRecipient.page === paginationRecipient.totalPages
+              paginationRecipient.page === paginationRecipient.totalPages ||
+              recipientTransactions.length <= 0
             }
             className="bg-gray-200 cursor-pointer disabled:cursor-no-drop text-gray-700 px-4 py-2 rounded-md disabled:opacity-50"
           >
@@ -376,6 +431,48 @@ export default function Home() {
 
         <div className="overflow-x-auto mt-7">
           <h3 className="text-xl font-semibold mb-2">Enviados </h3>
+
+          <section className="mb-8">
+            <div className="flex gap-4 items-center">
+              <div>
+                <label htmlFor="">Data Inicial</label>
+                <input
+                  type="date"
+                  onChange={(e) =>
+                    setFilterSent((prev) => ({
+                      ...prev,
+                      startDate: e.target.value,
+                    }))
+                  }
+                  value={filterSent.startDate}
+                  className="w-full px-4 py-2 border rounded-md"
+                  placeholder="Data Inicial"
+                />
+              </div>
+              <div>
+                <label htmlFor="">Data Final</label>
+                <input
+                  type="date"
+                  onChange={(e) =>
+                    setFilterSent((prev) => ({
+                      ...prev,
+                      endDate: e.target.value,
+                    }))
+                  }
+                  value={filterSent.endDate}
+                  className="w-full px-4 py-2 border rounded-md"
+                  placeholder="Data Final"
+                />
+              </div>
+              <button
+                onClick={() => handlePageChangeSent(filterSent.page)}
+                disabled={isLoading}
+                className="bg-gray-200 cursor-pointer mt-6 disabled:cursor-no-drop text-gray-700 px-4 py-2 rounded-md disabled:opacity-50"
+              >
+                Filtro
+              </button>
+            </div>
+          </section>
 
           <table className="min-w-full bg-white border border-gray-200 rounded-md">
             <thead>
@@ -396,7 +493,7 @@ export default function Home() {
                       R$ {transaction.amount.toFixed(2)}
                     </td>
                     <td className="px-4 py-2 border-b">
-                      {new Date(transaction.data).toLocaleDateString()}
+                      {handleFormateData(transaction.data)}
                     </td>
                   </tr>
                 ))
@@ -414,7 +511,7 @@ export default function Home() {
         <div className="flex justify-center gap-2 mt-4">
           <button
             onClick={() => handlePageChangeSent(paginationSent.page - 1)}
-            disabled={paginationSent.page === 1}
+            disabled={paginationSent.page <= 1}
             className="bg-gray-200 text-gray-700 cursor-pointer disabled:cursor-no-drop px-4 py-2 rounded-md disabled:opacity-50"
           >
             Anterior
@@ -424,7 +521,10 @@ export default function Home() {
           </span>
           <button
             onClick={() => handlePageChangeSent(paginationSent.page + 1)}
-            disabled={paginationSent.page === paginationSent.totalPages}
+            disabled={
+              paginationSent.page === paginationSent.totalPages ||
+              sentTransactions.length <= 0
+            }
             className="bg-gray-200 cursor-pointer disabled:cursor-no-drop text-gray-700 px-4 py-2 rounded-md disabled:opacity-50"
           >
             Próxima

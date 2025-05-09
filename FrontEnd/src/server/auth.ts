@@ -51,6 +51,7 @@ export const authOptions: NextAuthOptions = {
           token.jwt = auth.token;
           token.expiration = auth.tokenExpirationTime;
           token.isAuthenticated = isSignIN;
+          token.id = auth.id;
         }
       }
 
@@ -71,23 +72,30 @@ export const authOptions: NextAuthOptions = {
       session: Session;
       token: JWT;
     }): Promise<Session | DefaultSession> {
-      if (!token || !token.jwt || !session || !token.isAuthenticated) {
-        console.log("aque");
+      if (
+        !token ||
+        !token.jwt ||
+        !session ||
+        !token.isAuthenticated ||
+        !token.id
+      ) {
         return { ...session, user: {} };
       }
 
       const newSession = {
         ...session,
-        acessToken: "",
+        acessToken: token.jwt,
         user: {
           isAuthenticated: false,
           ...session.user,
+          id: token.id,
         },
       };
 
       newSession.user = {
         name: token.name,
-        isAuthenticated: true, // ✅ Adiciona a propriedade esperada
+        isAuthenticated: true,
+        id: token.id,
       };
 
       return { ...newSession };

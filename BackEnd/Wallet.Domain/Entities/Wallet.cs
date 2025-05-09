@@ -39,9 +39,9 @@ namespace Wallet.Domain.Entities
         {
             var result = new Result();
 
-            if (amount < 0)
+            if (amount <= 0)
             {
-                result.AddError("O valor não pode ser negativo.");
+                result.AddError("O valor não pode ser negativo ou igual a zero.");
             }
 
             if (Balance + amount < Balance)

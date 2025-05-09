@@ -11,11 +11,28 @@ namespace Wallet.Api.Controllers
     public class TransactionsController(TransactionBusiness _transactionBusiness) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetFilteredTransactionsAsync([FromQuery] FilterTransaction filter)
+        [Route("received")]
+        public async Task<IActionResult> GetAllRecipientTransactionsAsync([FromQuery] FilterTransaction filter)
         {
             try
             {
-                var result = await _transactionBusiness.GetFilteredTransactionsAsync(filter);
+                var result = await _transactionBusiness.GetAllRecipientTransactionsAsync(filter);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("sent")]
+        public async Task<IActionResult> GetAllSentTransactionsAsync([FromQuery] FilterTransaction filter)
+        {
+            try
+            {
+                var result = await _transactionBusiness.GetAllSentTransactionsAsync(filter);
 
                 return Ok(result);
             }
@@ -25,4 +42,6 @@ namespace Wallet.Api.Controllers
             }
         }
     }
+
+
 }

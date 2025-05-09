@@ -65,6 +65,8 @@ A aplicação foi totalmente configurada para rodar com Docker. Se você já tem
    docker-compose up -d
    ```
 
+A aplicação estará disponível em: http://localhost:3000 e o back-end (Swagger) em: http://localhost:5124/index.html
+
 se não siga os passo abaixo.
 
 ### 🌐 Front-end (Next.js)

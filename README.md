@@ -106,13 +106,13 @@ Observações:
 4. Rode o front-end:
 
    ```bash
-   yarn install
+   yarn run dev
    ```
 
    ou
 
    ```bash
-   npm install
+   npm run dev
    ```
 
 A aplicação estará disponível em: http://localhost:3000

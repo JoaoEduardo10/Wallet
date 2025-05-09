@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db-postgres-wallet:
-    container_name: wallet
+    container_name: wallet-db
     image: postgres
     environment:
       POSTGRES_PASSWORD: root
@@ -10,4 +10,40 @@ services:
       POSTGRES_DB: wallet-challenges
     ports:
       - "5432:5432"
-  
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - wallet-net
+
+  back-end:
+    container_name: wallet-back
+    build:
+      context: ./BackEnd
+      dockerfile: Dockerfile
+    ports:
+      - "5124:8080"
+    depends_on:
+      - db-postgres-wallet
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+    command: sh -c "sleep 4 && dotnet Wallet.Api.dll"
+    networks:
+      - wallet-net
+
+  front-end:
+    container_name: wallet-front
+    build:
+      context: ./FrontEnd
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - back-end
+    networks:
+      - wallet-net
+
+volumes:
+  pgdata:
+
+networks:
+  wallet-net:

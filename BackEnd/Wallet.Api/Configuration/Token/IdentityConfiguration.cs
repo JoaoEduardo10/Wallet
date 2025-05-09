@@ -3,7 +3,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Wallet.Application.Interfaces;
 using Wallet.Application.Business;
-using Wallet.Domain.Interfaces;
 
 namespace Wallet.Api.Configuration.Token
 {
@@ -32,11 +31,10 @@ namespace Wallet.Api.Configuration.Token
                     };
                 });
 
-            services.AddScoped<IAuthentication>(serviceProvider =>
-            {
-                var userRepository = serviceProvider.GetRequiredService<IUserRepository>();
 
-                return new AuthenticationBusiness(jwtSettings.Secret, jwtSettings.Lifespan, userRepository);
+            services.AddSingleton<IAuthentication>(serviceProvider =>
+            {
+                return new AuthenticationBusiness(jwtSettings.Secret, jwtSettings.Lifespan);
             });
         }
     }

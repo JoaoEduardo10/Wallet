@@ -1,11 +1,11 @@
 import { Authentication } from "@/app/models/auhtntication";
 import { treatErrorAxios } from "@/helpers/treat-error-axios";
-import UserService from "@/services/users";
 import { DefaultSession, getServerSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import IGenericSession from "@/app/models/Dtos/session";
+import axios from "axios";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -29,7 +29,13 @@ export const authOptions: NextAuthOptions = {
         try {
           const { email, password } = credentials!;
 
-          const response = await UserService.login(email, password);
+          const response = await axios.post(
+            process.env.NEXT_PUBLIC_API_URL_SERVER + "User/login",
+            {
+              email,
+              password,
+            }
+          );
 
           return response.data;
         } catch (error: unknown) {

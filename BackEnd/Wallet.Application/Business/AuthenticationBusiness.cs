@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Wallet.Application.Interfaces;
 using Wallet.Application.Models;
-using Wallet.Domain.Interfaces;
 using Wallet.Domain.Utilities;
 
 namespace Wallet.Application.Business
@@ -13,26 +12,15 @@ namespace Wallet.Application.Business
     {
         private string TokenSecret { get; }
         private int TokenLifespan { get; }
-
-        private readonly IUserRepository _userRepository;
-
-        public AuthenticationBusiness(string tokenSecret, int tokenLifespan, IUserRepository userRepository)
+        public AuthenticationBusiness(string tokenSecret, int tokenLifespan)
         {
             TokenSecret = tokenSecret;
             TokenLifespan = tokenLifespan;
-            _userRepository = userRepository;
         }
 
-        public async Task<Result<Authentication>> GetAuthenticationAsync(Guid userId)
+        public Result<Authentication> GetAuthentication(Guid userId, string name)
         {
             var tokenExpirationTime = DateTime.Now.AddSeconds(TokenLifespan);
-
-            var user =  _userRepository.GetById(userId);
-
-            if (user is null)
-            {
-                return new Result<Authentication>("Não foi possivel autenticar");
-            }
 
             var notBeforeTime = DateTime.Now;
 
@@ -41,7 +29,7 @@ namespace Wallet.Application.Business
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Name, name),
                 }),
                 Expires = tokenExpirationTime,
                 NotBefore = notBeforeTime,
@@ -57,7 +45,7 @@ namespace Wallet.Application.Business
             {
                 Id = userId,
                 Token = token,
-                Username = user.Name,
+                Username = name,
                 IsAuthenticated = true,
                 TokenExpirationTime = ((DateTimeOffset)tokenExpirationTime).ToUnixTimeSeconds(),
             };

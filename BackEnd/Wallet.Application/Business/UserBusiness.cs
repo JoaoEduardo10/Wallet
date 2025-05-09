@@ -40,7 +40,7 @@ namespace Wallet.Application.Business
                 return new Result<Authentication>("E-mail ou senha estão incorretos.");
             }
 
-            var resultAuthentication = await _authentication.GetAuthenticationAsync(user.Id);
+            var resultAuthentication =  _authentication.GetAuthentication(user.Id, user.Name);
 
             if (!resultAuthentication.Success)
             {

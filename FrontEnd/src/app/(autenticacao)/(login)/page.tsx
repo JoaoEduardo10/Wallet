@@ -1,6 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -85,12 +86,12 @@ export default function Login() {
         </form>
 
         <div className="mt-4 text-center">
-          <a
+          <Link
             href="/cadastro"
             className="text-sm text-indigo-500 hover:underline"
           >
             Não tem uma conta? Faça o cadastro
-          </a>
+          </Link>
         </div>
       </div>
     </main>

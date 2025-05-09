@@ -1,10 +1,11 @@
 ﻿using Wallet.Application.Models;
+using Wallet.Domain.Interfaces;
 using Wallet.Domain.Utilities;
 
 namespace Wallet.Application.Interfaces
 {
     public interface IAuthentication
     {
-        Task<Result<Authentication>> GetAuthenticationAsync(Guid userId);
+        Result<Authentication> GetAuthentication(Guid userId, string name);
     }
 }

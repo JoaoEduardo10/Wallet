@@ -11,6 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Configuration
+    .SetBasePath(AppContext.BaseDirectory)
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
 builder.Services.AddDataBaseConfiguration(builder.Configuration);
 
 builder.Services.AddSwaggerConfiguration();
@@ -18,13 +25,15 @@ builder.Services.AddSwaggerConfiguration();
 builder.Services.AddDependencyInjectionConfiguration();
 builder.Services.AddIdentityConfiguration(builder.Configuration);
 
+
+//esta parte esta aque por motivos de argilidade para o teste!
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()  // Allows any origin
-              .AllowAnyHeader()  // Allows any header
-              .AllowAnyMethod(); // Allows any method (GET, POST, etc.)
+        policy.AllowAnyOrigin()  
+              .AllowAnyHeader()  
+              .AllowAnyMethod();
     });
 });
 
